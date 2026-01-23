@@ -14,6 +14,7 @@ import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Set;
 
 @RestController
 @RequestMapping("/admin/dish")
@@ -23,6 +24,8 @@ public class DishController {
 
     @Autowired
     private DishService dishService;
+
+    @Autowired RedisTemplate redisTemplate;
 
     /***
      * 新增菜品
@@ -34,6 +37,8 @@ public class DishController {
     public Result save(@RequestBody DishDTO dishDTO) {
         log.info("新增菜品：{}", dishDTO);
         dishService.saveWithFlavor(dishDTO);
+        //删除缓存数据
+        clearRedis("dish_*"+dishDTO.getCategoryId());
         return Result.success();
     }
 
@@ -60,6 +65,10 @@ public class DishController {
     public Result delete(@RequestParam List<Long> ids) {
         log.info("删除菜品：{}", ids);
         dishService.deleteBatch(ids);
+
+        //删除缓存数据
+        clearRedis("dish_*");
+
         return Result.success();
     }
 
@@ -86,6 +95,8 @@ public class DishController {
     public Result update(@RequestBody DishDTO dishDTO) {
         log.info("修改菜品：{}", dishDTO);
         dishService.updateWithFlavor(dishDTO);
+        //删除缓存数据
+        clearRedis("dish_*");
         return Result.success();
     }
 
@@ -96,10 +107,12 @@ public class DishController {
      * @return
      */
     @PostMapping("/status/{status}")
-    @ApiOperation("启用禁用员工账号")
+    @ApiOperation("菜品起售/停售")
     public Result startOrStop(@PathVariable Integer status, Long id) {
-        log.info("启用禁用员工账号：{}", id);
         dishService.startOrStop(status, id);
+
+        //删除缓存数据
+        clearRedis("dish_*");
         return Result.success();
     }
 
@@ -114,6 +127,10 @@ public class DishController {
         log.info("根据分类id查询菜品：{}", categoryId);
         List<DishVO> dishVOList = dishService.getByCategoryId(categoryId);
         return Result.success(dishVOList);
+    }
+    private void clearRedis(String key) {
+        Set keys = redisTemplate.keys(key);
+        redisTemplate.delete(keys);
     }
 
 }
