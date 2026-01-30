@@ -42,7 +42,6 @@ public class DishController {
         List<DishVO> list = (List<DishVO>)redisTemplate.opsForValue().get(key);
         //如果存在则直接返回，无需查询数据库
         if(list!=null){
-
             return Result.success(list);
         }
         //如果没有则查询数据库
@@ -50,7 +49,7 @@ public class DishController {
         dish.setCategoryId(categoryId);
         dish.setStatus(StatusConstant.ENABLE);
 
-        list = dishService.getByCategoryId(categoryId);
+        list = dishService.listWithFlavor(dish);
         //将数据存入redis缓存
         redisTemplate.opsForValue().set(key,list);
 
