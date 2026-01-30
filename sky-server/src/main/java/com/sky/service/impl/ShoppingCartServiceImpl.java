@@ -67,12 +67,30 @@ public class ShoppingCartServiceImpl implements ShoppingCartService {
 
     }
 
+    @Override
+    public void subShoppingCart(ShoppingCartDTO shoppingCartDTO) {
+        ShoppingCart shoppingCart = new ShoppingCart();
+        BeanUtils.copyProperties(shoppingCartDTO, shoppingCart);
+        shoppingCart.setUserId(BaseContext.getCurrentId());
+
+        //查询当前菜品或套餐是否在购物车中
+        List<ShoppingCart> list = shoppingCartMapper.list(shoppingCart);
+
+        ShoppingCart cart = list.get(0);
+        Integer number = cart.getNumber();
+        if (number == 1){
+            shoppingCartMapper.deleteById(cart.getId());
+        }
+        cart.setNumber(cart.getNumber() - 1);
+        shoppingCartMapper.updateNumberById(cart);
+
+    }
+
     public List<ShoppingCart> showShoppingCart() {
         Long currentId = BaseContext.getCurrentId();
         ShoppingCart shoppingCart = ShoppingCart.builder()
                         .userId(currentId)
                         .build();
-
         return shoppingCartMapper.list(shoppingCart);
     }
 
