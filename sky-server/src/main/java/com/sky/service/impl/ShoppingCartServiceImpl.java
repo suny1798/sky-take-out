@@ -31,7 +31,6 @@ public class ShoppingCartServiceImpl implements ShoppingCartService {
     /**
      * 添加购物车
      */
-    @Override
     public void addShoppingCart(ShoppingCartDTO shoppingCartDTO) {
         //
         ShoppingCart shoppingCart = new ShoppingCart();
@@ -68,7 +67,6 @@ public class ShoppingCartServiceImpl implements ShoppingCartService {
 
     }
 
-    @Override
     public List<ShoppingCart> showShoppingCart() {
         Long currentId = BaseContext.getCurrentId();
         ShoppingCart shoppingCart = ShoppingCart.builder()
@@ -76,5 +74,9 @@ public class ShoppingCartServiceImpl implements ShoppingCartService {
                         .build();
 
         return shoppingCartMapper.list(shoppingCart);
+    }
+
+    public void cleanShoppingCart() {
+        shoppingCartMapper.deleteByUserId(BaseContext.getCurrentId());
     }
 }
