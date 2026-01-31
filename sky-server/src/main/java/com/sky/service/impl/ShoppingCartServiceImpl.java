@@ -64,7 +64,6 @@ public class ShoppingCartServiceImpl implements ShoppingCartService {
             shoppingCart.setCreateTime(LocalDateTime.now());
             shoppingCartMapper.insert(shoppingCart);
         }
-
     }
 
     @Override
@@ -83,7 +82,6 @@ public class ShoppingCartServiceImpl implements ShoppingCartService {
         }
         cart.setNumber(cart.getNumber() - 1);
         shoppingCartMapper.updateNumberById(cart);
-
     }
 
     public List<ShoppingCart> showShoppingCart() {
