@@ -5,6 +5,7 @@ import com.sky.dto.OrdersSubmitDTO;
 import com.sky.result.PageResult;
 import com.sky.vo.OrderPaymentVO;
 import com.sky.vo.OrderSubmitVO;
+import com.sky.vo.OrderVO;
 import org.springframework.stereotype.Service;
 
 public interface OrderService {
@@ -38,4 +39,8 @@ public interface OrderService {
      * @return
      */
     PageResult pageQuery4User(Integer pageNum, Integer pageSize, Integer status);
+
+    OrderVO details(Long id);
+
+    void userCanxelById(Long id);
 }
