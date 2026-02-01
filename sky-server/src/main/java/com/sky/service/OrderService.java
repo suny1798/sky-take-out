@@ -43,4 +43,6 @@ public interface OrderService {
     OrderVO details(Long id);
 
     void userCanxelById(Long id);
+
+    void repetition(Long id);
 }
