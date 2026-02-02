@@ -419,8 +419,24 @@ public class OrderServiceImpl implements OrderService {
         }
 
         Orders oders = new Orders();
-        oders.setId(id);
+        oders.setId(ordersDB.getId());
         oders.setStatus(Orders.DELIVERY_IN_PROGRESS);
+
+        orderMapper.update(oders);
+    }
+
+    @Override
+    public void complete(Long id) {
+        Orders ordersDB = orderMapper.getById(id);
+
+        if (ordersDB == null || ordersDB.getStatus() != Orders.DELIVERY_IN_PROGRESS) {
+            throw new OrderBusinessException(MessageConstant.ORDER_STATUS_ERROR);
+        }
+
+        Orders oders = new Orders();
+        oders.setId(ordersDB.getId());
+        oders.setStatus(Orders.COMPLETED);
+        oders.setDeliveryTime(LocalDateTime.now());
 
         orderMapper.update(oders);
     }
