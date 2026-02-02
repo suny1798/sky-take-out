@@ -450,4 +450,21 @@ public class OrderServiceImpl implements OrderService {
 
         orderMapper.update(oders);
     }
+
+    public void remind(Long id) {
+        // 根据订单号查询订单
+        Orders ordersDB = orderMapper.getById(id);
+
+        if (ordersDB == null || ordersDB.getStatus() != Orders.TO_BE_CONFIRMED) {
+            throw new OrderBusinessException(MessageConstant.ORDER_STATUS_ERROR);
+        }
+
+        //向客户端发送消息 {type orderId content}
+        Map map = new HashMap();
+        map.put("type", 2);//1表示来单提醒，2表示客户催单
+        map.put("orderId", ordersDB.getId());
+        map.put("content", "有用户催单了: " + ordersDB.getNumber());
+        String jsonString = JSON.toJSONString(map);
+        webSocketServer.sendToAllClient(jsonString);
+    }
 }
