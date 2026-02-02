@@ -53,4 +53,6 @@ public interface OrderService {
     void confirm(OrdersConfirmDTO ordersConfirmDTO);
 
     void rejection(OrdersRejectionDTO ordersRejectionDTO);
+
+    void cancel(OrdersCancelDTO ordersCancelDTO);
 }
