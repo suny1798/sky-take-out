@@ -49,6 +49,22 @@ public interface OrderMapper {
     @Select("select * from orders where status = #{status} and order_time < #{orderTime}")
     List<Orders> processTimeOutOrder(Integer status, LocalDateTime orderTime);
 
+    /**
+     * 查询配送中且超时的订单
+     * @param deliveryInProgress
+     * @param localDateTime
+     * @return
+     */
     @Select("select * from orders where status = #{deliveryInProgress} and update_time < #{localDateTime}")
     List<Orders> processCancelOrder(Integer deliveryInProgress, LocalDateTime localDateTime);
+
+    /**
+     * 根据日期范围查询已完成订单的总金额
+     * @param localBeginTime
+     * @param localEndTime
+     * @param completed
+     * @return
+     */
+    @Select("select sum(amount) from orders where order_time between #{localBeginTime} and #{localEndTime} and status = #{completed}")
+    Double searchByDate(LocalDateTime localBeginTime, LocalDateTime localEndTime, Integer completed);
 }
