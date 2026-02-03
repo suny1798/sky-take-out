@@ -19,8 +19,8 @@ public interface UserMapper {
     User getById(Long userId);
 
     @Select("select count(*) from user where create_time < #{localEndTime}")
-    Double searchUserByEndTime(LocalDateTime localEndTime);
+    Integer searchUserByEndTime(LocalDateTime localEndTime);
 
     @Select("select count(*) from user where create_time between #{localBeginTime} and #{localEndTime}")
-    Double searchUserBycreateTime(LocalDateTime localBeginTime, LocalDateTime localEndTime);
+    Integer searchUserBycreateTime(LocalDateTime localBeginTime, LocalDateTime localEndTime);
 }

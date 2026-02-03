@@ -77,16 +77,16 @@ public class ReportServiceImpl implements ReportService {
             datelist.add(begin);
         }
 
-        List<Double> userList = new ArrayList<>();
-        List<Double> NewuserList = new ArrayList<>();
+        List<Integer> userList = new ArrayList<>();
+        List<Integer> NewuserList = new ArrayList<>();
 
         for (LocalDate localDate : datelist) {
             LocalDateTime localBeginTime = LocalDateTime.of(localDate, LocalTime.MIN);
             LocalDateTime LocalEndTime = LocalDateTime.of(localDate, LocalTime.MAX);
             //查询当天的所有用户
-            Double totaluser = userMapper.searchUserByEndTime(LocalEndTime);
+            Integer totaluser = userMapper.searchUserByEndTime(LocalEndTime);
             //查询当天新增的用户
-            Double newuser = userMapper.searchUserBycreateTime(localBeginTime, LocalEndTime);
+            Integer newuser = userMapper.searchUserBycreateTime(localBeginTime, LocalEndTime);
             userList.add(totaluser);
             NewuserList.add(newuser);
         }

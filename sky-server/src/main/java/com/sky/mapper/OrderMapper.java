@@ -10,6 +10,7 @@ import org.springframework.core.annotation.Order;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Map;
 
 @Mapper
 public interface OrderMapper {
@@ -79,8 +80,23 @@ public interface OrderMapper {
     @Select("select count(id) from orders where order_time between #{localBeginTime} and #{localEndTime} and status = #{completed}")
     Integer searchByDate(LocalDateTime localBeginTime, LocalDateTime localEndTime, Integer completed);
 
+    /**
+     * 查询指定时间段内的所有订单数量
+     * @param localBeginTime
+     * @param localEndTime
+     * @return
+     */
     @Select("select count(id) from orders where order_time between #{localBeginTime} and #{localEndTime}")
     Integer searchAll(LocalDateTime localBeginTime, LocalDateTime localEndTime);
 
+    /**
+     * 查询指定时间段内销量前十的商品
+     * @param localBeginTime
+     * @param localEndTime
+     * @return
+     */
     List<GoodsSalesDTO> searchDetailsTop10(LocalDateTime localBeginTime, LocalDateTime localEndTime);
+
+
+    Integer countByMap(Map map);
 }

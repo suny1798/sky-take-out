@@ -81,5 +81,17 @@
         order by number desc
         limit 0,10
     </select>
+    <select id="countByMap" resultType="java.lang.Integer">
+        SELECT COUNT(*)
+        FROM orders
+        <where>
+            <if test="begin != null">
+                AND order_time >= #{begin}
+            </if>
+            <if test="status != null">
+                AND status = #{status}
+            </if>
+        </where>
+    </select>
 </mapper>
 
