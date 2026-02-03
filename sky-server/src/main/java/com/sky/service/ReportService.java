@@ -1,7 +1,9 @@
 package com.sky.service;
 
+import com.aliyuncs.http.HttpResponse;
 import com.sky.vo.*;
 
+import javax.servlet.http.HttpServletResponse;
 import java.time.LocalDate;
 
 public interface ReportService {
@@ -13,4 +15,6 @@ public interface ReportService {
     OrderReportVO getOrderStatistics(LocalDate begin, LocalDate end);
 
     SalesTop10ReportVO getSalesTop10Report(LocalDate begin, LocalDate end);
+
+    void exportBusinessData(HttpServletResponse response);
 }
