@@ -66,5 +66,18 @@ public interface OrderMapper {
      * @return
      */
     @Select("select sum(amount) from orders where order_time between #{localBeginTime} and #{localEndTime} and status = #{completed}")
-    Double searchByDate(LocalDateTime localBeginTime, LocalDateTime localEndTime, Integer completed);
+    Double searchAmountByDate(LocalDateTime localBeginTime, LocalDateTime localEndTime, Integer completed);
+
+    /**
+     * 根据日期范围查询已完成订单的总数量
+     * @param localBeginTime
+     * @param localEndTime
+     * @param completed
+     * @return
+     */
+    @Select("select count(id) from orders where order_time between #{localBeginTime} and #{localEndTime} and status = #{completed}")
+    Integer searchByDate(LocalDateTime localBeginTime, LocalDateTime localEndTime, Integer completed);
+
+    @Select("select count(id) from orders where order_time between #{localBeginTime} and #{localEndTime}")
+    Integer searchAll(LocalDateTime localBeginTime, LocalDateTime localEndTime);
 }
