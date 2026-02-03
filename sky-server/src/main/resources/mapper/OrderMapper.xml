@@ -68,5 +68,18 @@
         </where>
         order by order_time desc
     </select>
+    <select id="searchDetailsTop10" resultType="com.sky.dto.GoodsSalesDTO">
+        select od.name, sum(od.number) number from order_detail od,orders o
+        where od.order_id = o.id and o.status = 5
+        <if test="localBeginTime != null">
+            and o.order_time &gt; #{localBeginTime}
+        </if>
+        <if test="localEndTime != null">
+            and o.order_time &lt; #{localEndTime}
+        </if>
+        group by od.name
+        order by number desc
+        limit 0,10
+    </select>
 </mapper>
 

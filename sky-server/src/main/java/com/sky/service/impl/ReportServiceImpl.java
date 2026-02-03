@@ -1,13 +1,11 @@
 package com.sky.service.impl;
 
+import com.sky.dto.GoodsSalesDTO;
 import com.sky.entity.Orders;
 import com.sky.mapper.OrderMapper;
 import com.sky.mapper.UserMapper;
 import com.sky.service.ReportService;
-import com.sky.vo.OrderReportVO;
-import com.sky.vo.OrderStatisticsVO;
-import com.sky.vo.TurnoverReportVO;
-import com.sky.vo.UserReportVO;
+import com.sky.vo.*;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,6 +16,7 @@ import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @Slf4j
@@ -138,6 +137,28 @@ public class ReportServiceImpl implements ReportService {
                 .totalOrderCount(totalOrderCount)
                 .validOrderCount(validOrderCount)
                 .validOrderCountList(StringUtils.join(validOrderCountList, ","))
+                .build();
+    }
+
+    /**
+     * 获取销售前十统计报表
+     *
+     * @param begin 开始日期
+     * @param end   结束日期
+     * @return 销售前十统计报表
+     */
+    public SalesTop10ReportVO getSalesTop10Report(LocalDate begin, LocalDate end) {
+
+        LocalDateTime localBeginTime = LocalDateTime.of(begin, LocalTime.MIN);
+        LocalDateTime LocalEndTime = LocalDateTime.of(end, LocalTime.MAX);
+        List<GoodsSalesDTO> goodsSalesDTO = orderMapper.searchDetailsTop10(localBeginTime, LocalEndTime);
+
+        List<String> collect = goodsSalesDTO.stream().map(GoodsSalesDTO::getName).collect(Collectors.toList());
+        List<Integer> numberList = goodsSalesDTO.stream().map(GoodsSalesDTO::getNumber).collect(Collectors.toList());
+
+        return SalesTop10ReportVO.builder()
+                .nameList(StringUtils.join(collect, ","))
+                .numberList(StringUtils.join(numberList, ","))
                 .build();
     }
 }
